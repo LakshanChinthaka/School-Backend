@@ -1,0 +1,31 @@
+eureka:
+  client:
+    register-with-eureka: true
+
+server:
+  port: 8060
+
+spring:
+  application:
+    name: api-gateway
+  config:
+    import: optional:configserver:http://localhost:8888
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: student-service
+          uri: lb://student-service
+          predicates:
+            - Path=/api/v1/students/**
+        - id: school-service
+          uri: lb://school-service
+          predicates:
+            - Path=/api/v1/schools/**
+#spring:
+#  cloud:
+#    config:
+#      import-check:
+#        enabled: false
